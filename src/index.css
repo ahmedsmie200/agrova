@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body { 
+  font-family: 'DM Sans', sans-serif; 
+  overflow-x: hidden; 
+  background-color: #fafafa;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+::-webkit-scrollbar-thumb {
+  background: #ddd; 
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #EAB308; 
+}
+
+/* Custom Selection */
+::selection {
+  background: rgba(234, 179, 8, 0.5); /* Yellow brand color */
+  color: #111;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap');
