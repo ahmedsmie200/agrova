@@ -47,7 +47,7 @@ export default function Signup() {
                             <input
                                 type="text"
                                 required
-                                placeholder="John"
+                                placeholder="Ahmed"
                                 style={{
                                     width: "100%", padding: "12px 14px 12px 38px", border: "1.5px solid #eaeaea",
                                     borderRadius: 10, fontSize: 14, fontFamily: "'DM Sans', sans-serif",
@@ -67,7 +67,7 @@ export default function Signup() {
                             <input
                                 type="text"
                                 required
-                                placeholder="Doe"
+                                placeholder="Samir"
                                 style={{
                                     width: "100%", padding: "12px 14px 12px 38px", border: "1.5px solid #eaeaea",
                                     borderRadius: 10, fontSize: 14, fontFamily: "'DM Sans', sans-serif",
