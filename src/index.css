@@ -2,40 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply font-sans bg-neutral-50 overflow-x-hidden;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-300 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-brand-500;
+  }
+
+  /* Custom Selection */
+  ::selection {
+    @apply bg-brand-500/50 text-neutral-950;
+  }
 }
 
-body { 
-  font-family: 'DM Sans', sans-serif; 
-  overflow-x: hidden; 
-  background-color: #fafafa;
-}
+@layer components {
+  /* Reusable section padding */
+  .section-padding {
+    @apply px-5 md:px-16 py-16 md:py-24;
+  }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: transparent; 
-}
-::-webkit-scrollbar-thumb {
-  background: #ddd; 
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #EAB308; 
-}
+  /* Reusable container */
+  .section-container {
+    @apply max-w-[1100px] mx-auto;
+  }
 
-/* Custom Selection */
-::selection {
-  background: rgba(234, 179, 8, 0.5); /* Yellow brand color */
-  color: #111;
-}
+  /* Glassmorphism card */
+  .glass-card {
+    @apply bg-black/45 backdrop-blur-xl border border-white/15 rounded-3xl;
+  }
 
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+  /* Section badge pill */
+  .section-badge {
+    @apply inline-block border border-neutral-300 rounded-full px-4 py-1.5 text-xs font-medium text-neutral-600 tracking-wide;
+  }
+
+  /* Input field base */
+  .input-field {
+    @apply w-full px-4 py-3.5 pl-11 border-[1.5px] border-neutral-200 rounded-xl text-[15px] font-sans text-neutral-950 outline-none transition-colors duration-200 focus:border-neutral-950 placeholder:text-neutral-400;
+  }
+
+  /* Marquee hover pause */
+  .marquee-row:hover div {
+    animation-play-state: paused;
+  }
+}

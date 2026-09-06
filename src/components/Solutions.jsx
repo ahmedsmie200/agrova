@@ -1,253 +1,131 @@
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ArrowLeft, Sprout } from "lucide-react";
-import precisionFarmer from "../assets/precision-farmer.png";
-import irrigationImg from "../assets/irrigation.png";
-import pestImg from "../assets/pest-monitor.png";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { ArrowRight, ArrowLeft, Sprout } from 'lucide-react';
+
+import precisionFarmer from '../assets/precision-farmer.png';
+import irrigation from '../assets/irrigation.png';
+import pestMonitor from '../assets/pest-monitor.png';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1, y: 0,
+    transition: { duration: 0.6, ease: "easeOut" }
+  }
+};
 
 export default function Solutions() {
-  const sectionRef = useRef(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.15 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section
-      id="solutions"
-      ref={sectionRef}
-      className="px-5 md:px-[60px] py-[60px] md:py-[80px]"
-      style={{
-        background: "#F5F5F5",
-        fontFamily: "'DM Sans', sans-serif",
-      }}
-    >
-      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-
-        {/* ── TOP ROW: Title + Arrows ── */}
-        <div
-          className="flex flex-col sm:flex-row gap-6 sm:gap-0 justify-between items-start"
-          style={{
-            marginBottom: 36,
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(20px)",
-            transition: "opacity 0.6s ease, transform 0.6s ease",
-          }}>
-          <h2 style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "clamp(28px, 4vw, 40px)",
-            fontWeight: 700,
-            letterSpacing: "-1px",
-            color: "#111",
-            lineHeight: 1.15,
-            maxWidth: 380,
-          }}>
-            Complete Solutions for Modern Agriculture
-          </h2>
-
-          {/* Nav arrows */}
-          <div style={{ display: "flex", gap: 10, alignItems: "center", paddingTop: 8 }}>
-            <button
-              onClick={() => alert("Showing previous solutions...")}
-              style={{
-                width: 48, height: 48, borderRadius: "50%",
-                border: "1.5px solid #ddd", background: "#fff",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                cursor: "pointer", transition: "all 0.2s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = "#f0f0f0"}
-              onMouseLeave={e => e.currentTarget.style.background = "#fff"}
-            >
-              <ArrowLeft size={18} color="#111" />
+    <section id="solutions" className="py-24 bg-gray-50">
+      <div className="container mx-auto px-4 max-w-7xl">
+        
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-2xl"
+          >
+            <h2 className="text-forest-700 font-serif text-4xl md:text-5xl leading-tight mb-4">
+              Complete Solutions for <br className="hidden md:block" />Modern Agriculture
+            </h2>
+            <p className="text-gray-600 text-lg">
+              Our comprehensive suite of tools helps you monitor, analyze, and optimize every aspect of your farming operations.
+            </p>
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex gap-4"
+          >
+            <button className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-forest-600 hover:text-white hover:border-forest-600 transition-colors">
+              <ArrowLeft size={20} />
             </button>
-            <button
-              onClick={() => alert("Showing more solutions...")}
-              style={{
-                width: 48, height: 48, borderRadius: "50%",
-                border: "none", background: "#EAB308",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                cursor: "pointer", transition: "all 0.2s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = "#ca9e05"}
-              onMouseLeave={e => e.currentTarget.style.background = "#EAB308"}
-            >
-              <ArrowRight size={18} color="#fff" />
+            <button className="w-12 h-12 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:bg-forest-600 hover:text-white hover:border-forest-600 transition-colors">
+              <ArrowRight size={20} />
             </button>
-          </div>
+          </motion.div>
         </div>
 
-        {/* ── CARDS ROW ── */}
-        <div className="!grid-cols-1 lg:!grid-cols-[1fr_0.55fr_0.55fr]" style={{ display: "grid", gridTemplateColumns: "1fr 0.55fr 0.55fr", gap: 16 }}>
-
-          {/* ── CARD 1: Precision Farming (large) ── */}
-          <div style={{
-            background: "#fff",
-            borderRadius: 24,
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(30px)",
-            transition: "opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s",
-          }}>
-            {/* Inner layout: image left + content right */}
-            <div className="flex-col md:flex-row" style={{ display: "flex", flex: 1 }}>
-              {/* Left: farmer image */}
-              <div className="w-full md:w-[48%]" style={{ position: "relative", minHeight: 380 }}>
-                <img src={precisionFarmer} alt="Precision Farming"
-                  style={{
-                    width: "100%", height: "100%",
-                    objectFit: "cover",
-                    borderRadius: "0 0 0 0",
-                  }}
-                />
+        {/* Grid */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1fr_0.55fr_0.55fr] gap-6 auto-rows-[400px]"
+        >
+          {/* Card 1: Precision Farming */}
+          <motion.div variants={itemVariants} className="bg-white rounded-3xl p-2 md:col-span-2 lg:col-span-1 shadow-sm border border-gray-100 group flex flex-col sm:flex-row overflow-hidden">
+            <div className="w-full sm:w-1/2 h-48 sm:h-full rounded-2xl overflow-hidden shrink-0 relative">
+              <img 
+                src={precisionFarmer} 
+                alt="Precision Farming" 
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+            </div>
+            <div className="p-6 sm:p-8 flex flex-col justify-center w-full">
+              <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-600 px-3 py-1 rounded-full text-sm font-semibold w-fit mb-6">
+                <Sprout size={16} />
+                <span>Smart Inputs</span>
               </div>
-
-              {/* Right: content */}
-              <div style={{
-                flex: 1, padding: "32px 28px",
-                display: "flex", flexDirection: "column", justifyContent: "space-between",
-              }}>
-                {/* Smart input badge */}
-                <div>
-                  <div style={{
-                    display: "inline-flex", alignItems: "center", gap: 8,
-                    background: "#f5f5f5", borderRadius: 100,
-                    padding: "8px 14px", marginBottom: 32,
-                  }}>
-                    <Sprout size={16} color="#555" />
-                    <div>
-                      <p style={{ fontSize: 11, color: "#888", margin: 0 }}>Smart input</p>
-                      <p style={{ fontSize: 13, fontWeight: 600, color: "#111", margin: 0 }}>
-                        500+ acres support
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Title + desc */}
-                <div>
-                  <h3 style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: 24, fontWeight: 700,
-                    letterSpacing: "-0.5px",
-                    color: "#111", marginBottom: 12,
-                  }}>
-                    Precision Farming
-                  </h3>
-                  <p style={{ fontSize: 13, color: "#777", lineHeight: 1.6, marginBottom: 28 }}>
-                    GPS-guided equipment and sensors for accurate field management and resource allocation.
-                  </p>
-
-                  {/* Learn more button */}
-                  <div style={{
-                    display: "flex", alignItems: "center",
-                    justifyContent: "space-between",
-                  }}>
-                    <span style={{ fontSize: 13, color: "#555", fontWeight: 500 }}>
-                      Learn more about smart farming
-                    </span>
-                    <button
-                      onClick={() => alert("Loading more information...")}
-                      style={{
-                        width: 40, height: 40, borderRadius: "50%",
-                        background: "#111", border: "none",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        cursor: "pointer", transition: "background 0.2s",
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.background = "#333"}
-                      onMouseLeave={e => e.currentTarget.style.background = "#111"}
-                    >
-                      <ArrowRight size={16} color="#fff" />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Precision Farming</h3>
+              <p className="text-gray-600 mb-8 line-clamp-3">
+                Optimize your resource usage with data-driven insights. Apply the right amount of water, fertilizer, and pesticides exactly where and when they are needed.
+              </p>
+              <button className="inline-flex items-center gap-2 text-forest-600 font-bold hover:text-forest-700 transition-colors mt-auto w-fit group/btn">
+                Learn more 
+                <ArrowRight size={18} className="transition-transform group-hover/btn:translate-x-1" />
+              </button>
             </div>
-          </div>
+          </motion.div>
 
-          {/* ── CARD 2: Smart Irrigation ── */}
-          <div style={{
-            borderRadius: 24, overflow: "hidden", position: "relative",
-            minHeight: 380,
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(30px)",
-            transition: "opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s",
-            cursor: "pointer",
-          }}
-            onMouseEnter={e => e.currentTarget.querySelector("img").style.transform = "scale(1.05)"}
-            onMouseLeave={e => e.currentTarget.querySelector("img").style.transform = "scale(1)"}
-          >
-            <img src={irrigationImg} alt="Smart Irrigation"
-              style={{
-                width: "100%", height: "100%",
-                objectFit: "cover", position: "absolute", inset: 0,
-                transition: "transform 0.5s ease",
-              }}
+          {/* Card 2: Smart Irrigation */}
+          <motion.div variants={itemVariants} className="rounded-3xl overflow-hidden relative group cursor-pointer shadow-sm">
+            <img 
+              src={irrigation} 
+              alt="Smart Irrigation" 
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
-            {/* Gradient overlay */}
-            <div style={{
-              position: "absolute", inset: 0,
-              background: "linear-gradient(to top, rgba(0,0,0,0.65) 40%, transparent 100%)",
-            }} />
-            {/* Title */}
-            <div style={{
-              position: "absolute", bottom: 28, left: 24, right: 24,
-            }}>
-              <h3 style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 22, fontWeight: 600,
-                color: "#fff", lineHeight: 1.25,
-              }}>
-                Smart Irrigation Systems
-              </h3>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity group-hover:opacity-90" />
+            <div className="absolute bottom-0 left-0 p-8 w-full">
+              <h3 className="text-2xl font-bold text-white mb-2 transform transition-transform group-hover:-translate-y-2">Smart Irrigation</h3>
+              <p className="text-white/80 opacity-0 h-0 transition-all duration-300 group-hover:opacity-100 group-hover:h-auto line-clamp-2">
+                Automated watering schedules based on real-time soil moisture data and weather forecasts.
+              </p>
             </div>
-          </div>
+          </motion.div>
 
-          {/* ── CARD 3: Pest & Disease ── */}
-          <div style={{
-            borderRadius: 24, overflow: "hidden", position: "relative",
-            minHeight: 380,
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(30px)",
-            transition: "opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s",
-            cursor: "pointer",
-          }}
-            onMouseEnter={e => e.currentTarget.querySelector("img").style.transform = "scale(1.05)"}
-            onMouseLeave={e => e.currentTarget.querySelector("img").style.transform = "scale(1)"}
-          >
-            <img src={pestImg} alt="Pest & Disease Monitoring"
-              style={{
-                width: "100%", height: "100%",
-                objectFit: "cover", position: "absolute", inset: 0,
-                transition: "transform 0.5s ease",
-              }}
+          {/* Card 3: Pest & Disease Monitoring */}
+          <motion.div variants={itemVariants} className="rounded-3xl overflow-hidden relative group cursor-pointer shadow-sm">
+            <img 
+              src={pestMonitor} 
+              alt="Pest & Disease Monitoring" 
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
-            {/* Gradient overlay */}
-            <div style={{
-              position: "absolute", inset: 0,
-              background: "linear-gradient(to top, rgba(0,0,0,0.65) 40%, transparent 100%)",
-            }} />
-            {/* Title */}
-            <div style={{
-              position: "absolute", bottom: 28, left: 24, right: 24,
-            }}>
-              <h3 style={{
-                fontFamily: "'DM Sans', sans-serif",
-                fontSize: 22, fontWeight: 600,
-                color: "#fff", lineHeight: 1.25,
-              }}>
-                Pest & Disease Monitoring
-              </h3>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity group-hover:opacity-90" />
+            <div className="absolute bottom-0 left-0 p-8 w-full">
+              <h3 className="text-2xl font-bold text-white mb-2 transform transition-transform group-hover:-translate-y-2">Pest Monitoring</h3>
+              <p className="text-white/80 opacity-0 h-0 transition-all duration-300 group-hover:opacity-100 group-hover:h-auto line-clamp-2">
+                Early detection of pests and diseases using drone imagery and AI analysis.
+              </p>
             </div>
-          </div>
+          </motion.div>
 
-        </div>
+        </motion.div>
       </div>
     </section>
   );

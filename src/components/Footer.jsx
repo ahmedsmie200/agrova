@@ -1,240 +1,134 @@
 import { useState } from "react";
 import { ArrowUpRight, Facebook, Instagram, Linkedin } from "lucide-react";
+import { useToast } from "../components/ui/Toast";
 import hillsBg from "../assets/hills-bg.png";
 
 // X (Twitter) icon as SVG since lucide doesn't have it
-function XIcon({ size = 16, color = "#fff" }) {
+function XIcon({ size = 16, className = "" }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
     </svg>
   );
 }
 
-const NAV_LINKS = ["Home", "Solutions", "Sustainability", "About Us", "How It Work"];
+const NAV_LINKS = ["Home", "Solutions", "Sustainability", "About Us", "How It Works"];
 
 export default function Footer() {
   const [email, setEmail] = useState("");
+  const { toast } = useToast();
+
+  const handleSubscribe = () => {
+    if (email && /^\\S+@\\S+\\.\\S+$/.test(email)) {
+      toast({ title: "Subscribed successfully!", description: `We've added ${email} to our list.` });
+      setEmail("");
+    } else {
+      toast({ title: "Invalid email", description: "Please enter a valid email address.", variant: "destructive" });
+    }
+  };
+
+  const handleFreeTrial = () => {
+    toast({ title: "Free Trial Started", description: "Redirecting to your dashboard..." });
+  };
 
   return (
-    <footer style={{ fontFamily: "'DM Sans', sans-serif", overflow: "hidden" }}>
-
-      {/* ── CTA SECTION with hills image ── */}
-      <div style={{ position: "relative", background: "#f0f8e8" }}>
+    <footer className="font-sans overflow-hidden">
+      {/* CTA SECTION with hills image */}
+      <div className="relative bg-[#f0f8e8]">
         {/* Text above hills */}
-        <div className="px-5 md:px-[40px] pt-[50px] md:pt-[70px]" style={{
-          textAlign: "center",
-          position: "relative",
-          zIndex: 2,
-        }}>
-          <h2 style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "clamp(28px, 5vw, 52px)",
-            fontWeight: 700,
-            letterSpacing: "-2px",
-            color: "#111",
-            lineHeight: 1.15,
-            marginBottom: 16,
-          }}>
+        <div className="px-5 md:px-10 pt-[50px] md:pt-[70px] text-center relative z-10">
+          <h2 className="font-sans text-[clamp(28px,5vw,52px)] font-bold tracking-tight text-neutral-900 leading-[1.15] mb-4">
             Smarter Technology. Bigger Yields<br />Greater Success.
           </h2>
-          <p style={{ fontSize: 14, color: "#555", marginBottom: 32 }}>
+          <p className="text-sm text-neutral-600 mb-8 max-w-[500px] mx-auto">
             Join thousands of farmers using modern solutions to grow more with less.
           </p>
           <button
-            onClick={() => alert("Starting your Free Trial...")}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              background: "#EAB308",
-              color: "#111",
-              border: "none",
-              borderRadius: 100,
-              padding: "14px 28px",
-              fontSize: 15,
-              fontWeight: 600,
-              cursor: "pointer",
-              transition: "background 0.2s, transform 0.2s",
-              marginBottom: 0,
-              fontFamily: "'DM Sans', sans-serif",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = "#ca9e05"; e.currentTarget.style.transform = "scale(1.03)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = "#EAB308"; e.currentTarget.style.transform = "scale(1)"; }}
+            onClick={handleFreeTrial}
+            className="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 hover:scale-105 text-neutral-900 border-none rounded-full px-7 py-3.5 text-[15px] font-semibold cursor-pointer transition-all duration-200 font-sans"
           >
             Start Free Trial <ArrowUpRight size={16} />
           </button>
         </div>
 
         {/* Hills image */}
-        <div style={{ position: "relative", marginTop: -20, lineHeight: 0 }}>
+        <div className="relative -mt-5 leading-none">
           <img
             src={hillsBg}
             alt="Green hills"
-            style={{
-              width: "100%",
-              height: 340,
-              objectFit: "cover",
-              objectPosition: "center top",
-              display: "block",
-            }}
+            className="w-full h-[340px] object-cover object-top block"
           />
           {/* Fade bottom of image into dark */}
-          <div style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "55%",
-            background: "linear-gradient(to bottom, transparent, #111)",
-          }} />
+          <div className="absolute bottom-0 left-0 right-0 h-[55%] bg-gradient-to-b from-transparent to-neutral-950" />
         </div>
       </div>
 
-      {/* ── DARK FOOTER BODY ── */}
-      <div style={{ background: "#111", color: "#fff" }}>
-
+      {/* DARK FOOTER BODY */}
+      <div className="bg-neutral-950 text-white">
         {/* Email strip */}
-        <div className="flex-col md:flex-row px-5 md:px-[60px] py-6 md:py-[28px] gap-6 md:gap-[24px]" style={{
-          borderBottom: "1px solid rgba(255,255,255,0.1)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}>
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "clamp(16px, 2vw, 20px)",
-            fontWeight: 500,
-            color: "#fff",
-            margin: 0,
-            flexShrink: 0,
-          }}>
+        <div className="flex flex-col md:flex-row px-5 md:px-[60px] py-6 md:py-7 gap-6 md:gap-6 border-b border-white/10 items-center justify-between">
+          <p className="font-sans text-[clamp(16px,2vw,20px)] font-medium text-white m-0 shrink-0">
             Join Our Farming Community Today
           </p>
 
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 0,
-            flex: 1,
-            maxWidth: 560,
-            borderBottom: "1px solid rgba(255,255,255,0.25)",
-            paddingBottom: 8,
-          }}>
+          <div className="flex items-center flex-1 max-w-[560px] border-b border-white/25 pb-2 w-full">
             <input
               type="email"
               placeholder="Enter Your Email Address"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              style={{
-                flex: 1,
-                background: "transparent",
-                border: "none",
-                outline: "none",
-                color: "#fff",
-                fontSize: 14,
-                fontFamily: "'DM Sans', sans-serif",
-              }}
+              className="flex-1 bg-transparent border-none outline-none text-white text-sm font-sans placeholder:text-white/50"
             />
           </div>
 
           <button
-            onClick={() => {
-              if (email) { alert(`Subscribed with: ${email}`); setEmail(''); }
-              else { alert('Please enter an email address.'); }
-            }}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              background: "#EAB308",
-              color: "#111",
-              border: "none",
-              borderRadius: 100,
-              padding: "12px 24px",
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: "pointer",
-              flexShrink: 0,
-              fontFamily: "'DM Sans', sans-serif",
-              transition: "background 0.2s",
-            }}
-            onMouseEnter={e => e.currentTarget.style.background = "#ca9e05"}
-            onMouseLeave={e => e.currentTarget.style.background = "#EAB308"}
+            onClick={handleSubscribe}
+            className="inline-flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-neutral-900 border-none rounded-full px-6 py-3 text-sm font-semibold cursor-pointer shrink-0 font-sans transition-colors w-full md:w-auto justify-center"
           >
             Submit <ArrowUpRight size={14} />
           </button>
         </div>
 
         {/* Big AGROVA + tagline */}
-        <div className="flex-col md:flex-row px-5 md:px-[60px] pt-[30px] md:pt-[40px]" style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-        }}>
+        <div className="flex flex-col md:flex-row px-5 md:px-[60px] pt-[30px] md:pt-[40px] justify-between items-center md:items-end">
           {/* Logo word mark */}
-          <div style={{ display: "flex", alignItems: "center", gap: 0 }}>
+          <div className="flex items-center gap-0">
             {/* Leaf icon */}
-            <svg width="90" height="110" viewBox="0 0 80 100" fill="none" style={{ marginRight: -8 }}>
+            <svg width="90" height="110" viewBox="0 0 80 100" fill="none" className="-mr-2">
               <path d="M60 10 C20 10 10 50 15 85 C35 60 65 55 70 20 C70 15 66 10 60 10Z" fill="#fff" />
-              <path d="M15 85 C20 65 35 50 55 45" stroke="#111" strokeWidth="3" strokeLinecap="round" />
+              <path d="M15 85 C20 65 35 50 55 45" stroke="#0a0a0a" strokeWidth="3" strokeLinecap="round" />
             </svg>
-            <span style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "clamp(60px, 10vw, 120px)",
-              fontWeight: 700,
-              color: "#fff",
-              lineHeight: 1,
-              letterSpacing: "-5px",
-            }}>
+            <span className="font-sans text-[clamp(60px,10vw,120px)] font-bold text-white leading-none tracking-[-0.05em]">
               Agrova
             </span>
           </div>
 
           {/* Tagline top right */}
-          <p className="text-center md:text-right mt-4 md:mt-0" style={{
-            fontSize: 14,
-            color: "rgba(255,255,255,0.6)",
-            maxWidth: 260,
-            lineHeight: 1.65,
-            paddingBottom: 16,
-          }}>
+          <p className="text-center md:text-right mt-4 md:mt-0 text-sm text-white/60 max-w-[260px] leading-relaxed pb-4">
             Empowering farmers with sustainable solutions and modern technology for a better agricultural future.
           </p>
         </div>
 
         {/* Nav links */}
-        <div className="flex-col md:flex-row px-5 md:px-[60px] py-5 md:py-[28px] flex-wrap justify-center md:justify-start" style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 0,
-          borderTop: "1px solid rgba(255,255,255,0.08)",
-          marginTop: 8,
-        }}>
+        <div className="flex flex-col md:flex-row px-5 md:px-[60px] py-5 md:py-7 flex-wrap justify-center md:justify-start items-center border-t border-white/5 mt-2 gap-y-4">
           {NAV_LINKS.map((link, i) => {
             const hrefMap = {
               "Home": "#hero",
               "Solutions": "#solutions",
               "Sustainability": "#sustainability",
               "About Us": "#about",
-              "How It Work": "#how-it-works"
+              "How It Works": "#how-it-works"
             };
             return (
-              <span key={link} style={{ display: "flex", alignItems: "center" }}>
-                <a href={hrefMap[link] || "#"} style={{
-                  fontSize: 14,
-                  color: "rgba(255,255,255,0.7)",
-                  textDecoration: "none",
-                  transition: "color 0.2s",
-                  whiteSpace: "nowrap",
-                }}
-                  onMouseEnter={e => e.currentTarget.style.color = "#fff"}
-                  onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.7)"}
+              <span key={link} className="flex items-center">
+                <a 
+                  href={hrefMap[link] || "#"} 
+                  className="text-sm text-white/70 hover:text-white no-underline transition-colors whitespace-nowrap"
                 >
                   {link}
                 </a>
                 {i < NAV_LINKS.length - 1 && (
-                  <span style={{ color: "rgba(255,255,255,0.2)", margin: "0 20px", fontSize: 16 }}>/</span>
+                  <span className="text-white/20 mx-3 md:mx-5 text-base">/</span>
                 )}
               </span>
             )
@@ -242,47 +136,39 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex-col md:flex-row px-5 md:px-[60px] pb-8 md:pb-[32px] pt-5 md:pt-[20px] gap-6 md:gap-0 center-items" style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderTop: "1px solid rgba(255,255,255,0.08)",
-        }}>
-          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", margin: 0 }}>
-            ©2026 All Rights Reserved
+        <div className="flex flex-col md:flex-row px-5 md:px-[60px] pb-8 md:pb-8 pt-5 md:pt-5 gap-6 md:gap-0 items-center justify-between border-t border-white/5">
+          <p className="text-xs text-white/40 m-0">
+            © 2026 All Rights Reserved
           </p>
 
           {/* Social icons */}
-          <div style={{ display: "flex", gap: 10 }}>
+          <div className="flex gap-2.5">
             {[
-              { icon: <Facebook size={15} color="#111" />, label: "Facebook" },
-              { icon: <Instagram size={15} color="#111" />, label: "Instagram" },
-              { icon: <XIcon size={15} color="#111" />, label: "X" },
-              { icon: <Linkedin size={15} color="#111" />, label: "LinkedIn" },
+              { icon: <Facebook size={15} />, label: "Facebook" },
+              { icon: <Instagram size={15} />, label: "Instagram" },
+              { icon: <XIcon size={15} />, label: "X" },
+              { icon: <Linkedin size={15} />, label: "LinkedIn" },
             ].map(({ icon, label }) => (
-              <a key={label} href="#" title={label} style={{
-                width: 34, height: 34, borderRadius: "50%",
-                background: "#fff",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                transition: "background 0.2s, transform 0.2s",
-                textDecoration: "none",
-              }}
-                onMouseEnter={e => { e.currentTarget.style.background = "#EAB308"; e.currentTarget.style.transform = "scale(1.1)"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.transform = "scale(1)"; }}
+              <a 
+                key={label} 
+                href="https://example.com" 
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                title={label} 
+                className="w-[34px] h-[34px] rounded-full bg-white hover:bg-brand-500 hover:scale-110 text-neutral-900 flex items-center justify-center transition-all duration-200 no-underline"
               >
                 {icon}
               </a>
             ))}
           </div>
 
-          <div style={{ display: "flex", gap: 24 }}>
-            {["Terms of Service", "Privacy policy"].map(t => (
-              <a key={t} href="#" style={{
-                fontSize: 12, color: "rgba(255,255,255,0.4)",
-                textDecoration: "none", transition: "color 0.2s",
-              }}
-                onMouseEnter={e => e.currentTarget.style.color = "#fff"}
-                onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.4)"}
+          <div className="flex gap-6">
+            {["Terms of Service", "Privacy Policy"].map(t => (
+              <a 
+                key={t} 
+                href={`#${t.toLowerCase().replace(/ /g, '-')}`} 
+                className="text-xs text-white/40 hover:text-white no-underline transition-colors"
               >
                 {t}
               </a>

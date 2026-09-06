@@ -1,134 +1,102 @@
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import tractorImg from "../assets/tractor.png";
-import logoFull from "../assets/logo.png";
 
 export default function AuthLayout({ children, title, subtitle }) {
-    return (
-        <div style={{ display: "flex", minHeight: "100vh", fontFamily: "'DM Sans', sans-serif" }}>
-            {/* Left Pane - Branding & Image (Hidden on small screens) */}
-            <div style={{
-                flex: 1,
-                position: "relative",
-                display: "flex",
-                flexDirection: "column",
-                backgroundColor: "#111",
-                overflow: "hidden",
-            }}
-                className="hidden md:flex"
-            >
-                <img
-                    src={tractorImg}
-                    alt="Agriculture"
-                    style={{
-                        position: "absolute",
-                        inset: 0,
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        opacity: 0.4,
-                    }}
-                />
-                <div style={{
-                    position: "absolute",
-                    inset: 0,
-                    background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.6) 100%)",
-                }} />
+  return (
+    <div className="flex min-h-screen font-sans">
+      {/* Left Pane - Branding & Image (Hidden on small screens) */}
+      <div className="hidden md:flex flex-1 relative flex-col bg-neutral-950 overflow-hidden">
+        <img
+          src={tractorImg}
+          alt="Agriculture field with tractor"
+          className="absolute inset-0 w-full h-full object-cover opacity-40"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/60" />
 
-                {/* Logo Overlay */}
-                <div style={{ position: "relative", zIndex: 10, padding: "48px 60px" }}>
-                    <Link to="/" style={{ display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none" }}>
-                        <svg width="28" height="32" viewBox="0 0 80 100" fill="none">
-                            <path d="M60 10 C20 10 10 50 15 85 C35 60 65 55 70 20 C70 15 66 10 60 10Z" fill="#EAB308" />
-                            <path d="M15 85 C20 65 35 50 55 45" stroke="#fff" strokeWidth="4" strokeLinecap="round" />
-                        </svg>
-                        <span style={{
-                            fontFamily: "'DM Sans', sans-serif",
-                            fontSize: 28,
-                            fontWeight: 700,
-                            color: "#fff",
-                            lineHeight: 1,
-                            letterSpacing: "-0.5px",
-                        }}>
-                            Agrova
-                        </span>
-                    </Link>
-                </div>
-
-                {/* Bottom Text */}
-                <div style={{ position: "relative", zIndex: 10, padding: "60px", marginTop: "auto" }}>
-                    <h2 style={{
-                        fontSize: "clamp(36px, 4vw, 56px)",
-                        fontWeight: 700,
-                        color: "#fff",
-                        letterSpacing: "-2px",
-                        lineHeight: 1.1,
-                        marginBottom: 16,
-                    }}>
-                        Welcome to the future<br />of smart farming.
-                    </h2>
-                    <p style={{ color: "rgba(255,255,255,0.7)", fontSize: 16, lineHeight: 1.6, maxWidth: 440 }}>
-                        Join a global community of farmers utilizing data-driven insights to maximize yields and promote sustainable agriculture.
-                    </p>
-                </div>
-            </div>
-
-            {/* Right Pane - Form */}
-            <div style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                background: "#fff",
-                position: "relative",
-            }}>
-                {/* Back Button Mobile / Desktop */}
-                <div style={{ padding: "32px 40px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <Link to="/" style={{
-                        display: "inline-flex", alignItems: "center", gap: 8,
-                        color: "#555", textDecoration: "none", fontSize: 14, fontWeight: 600,
-                        transition: "color 0.2s"
-                    }}
-                        onMouseEnter={e => e.currentTarget.style.color = "#111"}
-                        onMouseLeave={e => e.currentTarget.style.color = "#555"}
-                    >
-                        <ArrowLeft size={16} /> Back to Home
-                    </Link>
-
-                    {/* Mobile Logo */}
-                    <div className="md:hidden">
-                        <svg width="20" height="24" viewBox="0 0 80 100" fill="none">
-                            <path d="M60 10 C20 10 10 50 15 85 C35 60 65 55 70 20 C70 15 66 10 60 10Z" fill="#EAB308" />
-                            <path d="M15 85 C20 65 35 50 55 45" stroke="#111" strokeWidth="4" strokeLinecap="round" />
-                        </svg>
-                    </div>
-                </div>
-
-                {/* Content Centered */}
-                <div style={{
-                    flex: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "40px 24px",
-                }}>
-                    <div style={{ width: "100%", maxWidth: 420 }}>
-                        <h1 style={{
-                            fontSize: "clamp(28px, 3vw, 36px)",
-                            fontWeight: 700,
-                            color: "#111",
-                            letterSpacing: "-1px",
-                            marginBottom: 8,
-                        }}>
-                            {title}
-                        </h1>
-                        <p style={{ fontSize: 15, color: "#666", marginBottom: 36, lineHeight: 1.6 }}>
-                            {subtitle}
-                        </p>
-
-                        {children}
-                    </div>
-                </div>
-            </div>
+        {/* Logo Overlay */}
+        <div className="relative z-10 p-12">
+          <Link to="/" className="inline-flex items-center gap-1.5 no-underline">
+            <svg width="28" height="32" viewBox="0 0 80 100" fill="none">
+              <path d="M60 10 C20 10 10 50 15 85 C35 60 65 55 70 20 C70 15 66 10 60 10Z" fill="#EAB308" />
+              <path d="M15 85 C20 65 35 50 55 45" stroke="#fff" strokeWidth="4" strokeLinecap="round" />
+            </svg>
+            <span className="text-[28px] font-bold text-white leading-none tracking-tight">
+              Agrova
+            </span>
+          </Link>
         </div>
-    );
+
+        {/* Bottom Text */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="relative z-10 p-12 lg:p-16 mt-auto"
+        >
+          <h2 className="text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.1] mb-4">
+            Welcome to the future
+            <br />
+            of smart farming.
+          </h2>
+          <p className="text-white/70 text-base leading-relaxed max-w-[440px]">
+            Join a global community of farmers utilizing data-driven insights to
+            maximize yields and promote sustainable agriculture.
+          </p>
+
+          {/* Feature highlights */}
+          <div className="flex flex-wrap gap-3 mt-8">
+            {["AI Analytics", "Smart Irrigation", "24/7 Support"].map((tag) => (
+              <span
+                key={tag}
+                className="px-4 py-2 rounded-full text-sm font-medium text-white/90 bg-white/10 border border-white/20 backdrop-blur-sm"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Right Pane - Form */}
+      <div className="flex-1 flex flex-col bg-white relative">
+        {/* Back Button */}
+        <div className="p-8 md:px-10 flex justify-between items-center">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 text-neutral-600 no-underline text-sm font-semibold hover:text-neutral-950 transition-colors"
+          >
+            <ArrowLeft size={16} /> Back to Home
+          </Link>
+
+          {/* Mobile Logo */}
+          <div className="md:hidden">
+            <svg width="20" height="24" viewBox="0 0 80 100" fill="none">
+              <path d="M60 10 C20 10 10 50 15 85 C35 60 65 55 70 20 C70 15 66 10 60 10Z" fill="#EAB308" />
+              <path d="M15 85 C20 65 35 50 55 45" stroke="#111" strokeWidth="4" strokeLinecap="round" />
+            </svg>
+          </div>
+        </div>
+
+        {/* Content Centered */}
+        <div className="flex-1 flex items-center justify-center px-6 py-10">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full max-w-[420px]"
+          >
+            <h1 className="text-3xl md:text-4xl font-bold text-neutral-950 tracking-tight mb-2">
+              {title}
+            </h1>
+            <p className="text-[15px] text-neutral-500 mb-9 leading-relaxed">
+              {subtitle}
+            </p>
+            {children}
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
 }

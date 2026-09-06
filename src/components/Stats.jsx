@@ -1,230 +1,128 @@
-import { useEffect, useRef, useState } from "react";
-import handsPlants from "../assets/hands-plants.png";
-import womanHarvest from "../assets/woman-harvest.png";
-import avatar1 from "../assets/avatar1.png";
-import avatar2 from "../assets/avatar2.png";
-import avatar3 from "../assets/avatar1.png";
-import fieldInline from "../assets/field-rows.png";
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
-// Animated counter hook
-function useCounter(target, duration = 2000, start = false) {
+import avatar1 from '../assets/avatar1.png';
+import avatar2 from '../assets/avatar2.png';
+import handsPlants from '../assets/hands-plants.png';
+import womanHarvest from '../assets/woman-harvest.png';
+import fieldRows from '../assets/field-rows.png';
+
+const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+const Counter = ({ target, duration = 2000, suffix = "" }) => {
   const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
   useEffect(() => {
-    if (!start) return;
-    let startTime = null;
-    const step = (timestamp) => {
+    if (!isInView) return;
+    
+    let startTime;
+    let animationFrame;
+
+    const updateCount = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(eased * target));
-      if (progress < 1) requestAnimationFrame(step);
+      const easedProgress = easeOutCubic(progress);
+      
+      setCount(Math.floor(easedProgress * target));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(updateCount);
+      }
     };
-    requestAnimationFrame(step);
-  }, [start, target, duration]);
-  return count;
-}
 
-const STATS = [
-  { label: "Acres Farmed", value: 10000, suffix: "K+", sub: "Supporting efficient farming at scale" },
-  { label: "Yield Improvement", value: 30, suffix: "%", sub: "Growing more with smarter farming" },
-  { label: "Farmers Trust Us", value: 50000, suffix: "K+", sub: "Proven results farmers trust" },
-];
-
-function StatCard({ label, value, suffix, sub, animate }) {
-  const display = suffix === "K+"
-    ? useCounter(Math.floor(value / 1000), 2000, animate)
-    : useCounter(value, 2000, animate);
+    animationFrame = requestAnimationFrame(updateCount);
+    
+    return () => cancelAnimationFrame(animationFrame);
+  }, [target, duration, isInView]);
 
   return (
-    <div style={{
-      background: "#F5F5F5",
-      borderRadius: 20,
-      padding: "32px 28px 28px",
-      flex: 1,
-      position: "relative",
-      minWidth: 0,
-    }}>
-      {/* Asterisk decoration */}
-      <span style={{
-        position: "absolute", top: 28, right: 28,
-        fontSize: 20, color: "#bbb", fontWeight: 300,
-      }}>✳</span>
-
-      <p style={{
-        fontSize: 14, fontWeight: 500, color: "#333",
-        marginBottom: 40, fontFamily: "'DM Sans', sans-serif",
-      }}>
-        {label}
-      </p>
-
-      <p style={{
-        fontFamily: "'DM Sans', sans-serif",
-        fontSize: "clamp(40px, 5vw, 52px)",
-        fontWeight: 700,
-        letterSpacing: "-1.5px",
-        color: "#111",
-        lineHeight: 1,
-        marginBottom: 12,
-      }}>
-        {display}{suffix}
-      </p>
-
-      <p style={{ fontSize: 12, color: "#888", fontFamily: "'DM Sans', sans-serif" }}>
-        {sub}
-      </p>
-    </div>
+    <span ref={ref}>
+      {count}{suffix}
+    </span>
   );
-}
+};
 
 export default function Stats() {
-  const sectionRef = useRef(null);
-  const [animate, setAnimate] = useState(false);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setAnimate(true);
-          setVisible(true);
-        }
-      },
-      { threshold: 0.2 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      style={{
-        background: "#fff",
-        padding: "100px 60px",
-        fontFamily: "'DM Sans', sans-serif",
-      }}
-    >
-      <div style={{
-        maxWidth: 1100,
-        margin: "0 auto",
-        display: "grid",
-        gridTemplateColumns: "320px 1fr",
-        gap: 80,
-        alignItems: "flex-start",
-      }}>
-        {/* ── LEFT COLUMN ── */}
-        <div style={{
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(30px)",
-          transition: "opacity 0.7s ease, transform 0.7s ease",
-        }}>
-          {/* Avatars + trusted */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
-            <div style={{ display: "flex" }}>
-              {[avatar1, avatar2, avatar3].map((av, i) => (
-                <img key={i} src={av} alt=""
-                  style={{
-                    width: 36, height: 36, borderRadius: "50%",
-                    objectFit: "cover", border: "2px solid #fff",
-                    marginLeft: i === 0 ? 0 : -10,
-                  }}
-                />
-              ))}
+    <section id="about" className="py-20 bg-white overflow-hidden">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+          {/* Left Column */}
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col gap-8"
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex -space-x-3">
+                <img src={avatar1} alt="Farmer 1" className="w-12 h-12 rounded-full border-2 border-white object-cover" />
+                <img src={avatar2} alt="Farmer 2" className="w-12 h-12 rounded-full border-2 border-white object-cover" />
+                <div className="w-12 h-12 rounded-full border-2 border-white bg-brand-500 flex items-center justify-center text-white font-bold text-sm">
+                  +
+                </div>
+              </div>
+              <p className="text-gray-600 font-medium">
+                <span className="font-bold text-gray-900">50K+</span> Farmers worldwide
+              </p>
             </div>
-            <span style={{ fontSize: 13, color: "#666" }}>Trusted by over</span>
-          </div>
+            
+            <div className="flex gap-4 h-48 md:h-64">
+              <img src={handsPlants} alt="Hands tending to plants" className="w-1/2 h-full object-cover rounded-2xl" />
+              <img src={womanHarvest} alt="Woman harvesting" className="w-1/2 h-full object-cover rounded-2xl mt-8" />
+            </div>
+            
+            <p className="text-gray-600 text-lg leading-relaxed mt-4">
+              At Agrova, we blend traditional farming knowledge with cutting-edge technology. Our mission is to empower farmers globally to increase yields, reduce environmental impact, and build a sustainable agricultural future.
+            </p>
+          </motion.div>
 
-          {/* 50K+ */}
-          <p style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: 42,
-            color: "#111",
-            lineHeight: 1,
-            letterSpacing: "-1px",
-            marginBottom: 6,
-          }}>
-            <strong style={{ fontWeight: 700 }}>50K+</strong>{" "}
-            <span style={{ fontSize: 14, color: "#888", fontWeight: 500 }}>
-              Farmer worldwide
-            </span>
-          </p>
-
-          {/* Two small images */}
-          <div style={{ display: "flex", gap: 10, marginTop: 32, marginBottom: 20 }}>
-            <img src={handsPlants} alt="hands with plants"
-              style={{
-                width: "48%", height: 130,
-                objectFit: "cover", borderRadius: 14,
-              }}
-            />
-            <img src={womanHarvest} alt="woman with harvest"
-              style={{
-                width: "48%", height: 130,
-                objectFit: "cover", borderRadius: 14,
-              }}
-            />
-          </div>
-
-          <p style={{ fontSize: 13, color: "#666", lineHeight: 1.6 }}>
-            Smart, data-driven agricultural solutions helping farmers improve yields while using fewer resources.
-          </p>
-        </div>
-
-        {/* ── RIGHT COLUMN ── */}
-        <div style={{
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(30px)",
-          transition: "opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s",
-        }}>
-          {/* Big headline */}
-          <h2 style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "clamp(28px, 4vw, 36px)",
-            fontWeight: 500,
-            letterSpacing: "-1px",
-            color: "#111",
-            lineHeight: 1.15,
-            marginBottom: 0,
-          }}>
-            We are committed to empowering farmers through{" "}
-            {/* Inline farm image pill */}
-            <span style={{
-              display: "inline-block",
-              width: 56, height: 34,
-              borderRadius: 100,
-              overflow: "hidden",
-              verticalAlign: "middle",
-              margin: "0 6px",
-              position: "relative",
-              top: -2,
-            }}>
-              <img src={fieldInline} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            </span>{" "}
-            smart sustainable{" "}
-            <span style={{ color: "#aaa" }}>
-              agricultural solutions that improve productivity and protect the land.
-            </span>
-          </h2>
-
-          {/* Subtext */}
-          <p style={{
-            fontSize: 13,
-            color: "#888",
-            lineHeight: 1.7,
-            maxWidth: 580,
-            marginTop: 28,
-            marginBottom: 40,
-          }}>
-            We empower farmers with smart data driven agricultural solutions that improve crop performance reduce resource waste and promote sustainable farming practices for long term success.
-          </p>
-
-          {/* Stat cards */}
-          <div style={{ display: "flex", gap: 16 }}>
-            {STATS.map((s, i) => (
-              <StatCard key={i} {...s} animate={animate} />
-            ))}
-          </div>
+          {/* Right Column */}
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-col gap-8"
+          >
+            <h2 className="font-serif text-5xl md:text-6xl text-forest-700 leading-tight">
+              Cultivating a <br />
+              <span className="inline-flex items-center align-middle gap-3">
+                brighter
+                <img src={fieldRows} alt="Field rows" className="h-12 w-32 object-cover rounded-full hidden sm:inline-block" />
+              </span> 
+              <br />
+              future together.
+            </h2>
+            
+            <p className="text-gray-600 text-lg">
+              We provide actionable insights and smart tools that transform data into successful harvests.
+            </p>
+            
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-4 mt-4">
+              <div className="bg-forest-50 rounded-xl p-6 border border-forest-100 flex-1 min-w-[140px]">
+                <p className="text-4xl font-bold text-forest-600 mb-2">
+                  <Counter target={10} suffix="K+" />
+                </p>
+                <p className="text-sm text-gray-600 font-medium">Acres Farmed</p>
+              </div>
+              <div className="bg-brand-50 rounded-xl p-6 border border-brand-100 flex-1 min-w-[140px]">
+                <p className="text-4xl font-bold text-brand-600 mb-2">
+                  <Counter target={30} suffix="%" />
+                </p>
+                <p className="text-sm text-gray-600 font-medium">Yield Improvement</p>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-6 border border-gray-100 flex-1 min-w-[140px] col-span-2 sm:col-span-1">
+                <p className="text-4xl font-bold text-gray-900 mb-2">
+                  <Counter target={50} suffix="K+" />
+                </p>
+                <p className="text-sm text-gray-600 font-medium">Farmers Trust Us</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>

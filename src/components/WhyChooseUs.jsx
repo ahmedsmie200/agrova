@@ -1,309 +1,130 @@
-import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, ArrowRight, ArrowLeft } from "lucide-react";
-import aerialImg from "../assets/why-aerial.png";
-import farmerPickImg from "../assets/why-farmer-pick.png";
-import robotImg from "../assets/why-robot.png";
-import womanHarvestImg from "../assets/why-woman-harvest.png";
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUpRight, ArrowRight, ArrowLeft } from 'lucide-react';
+import aerialImg from '../assets/why-aerial.png';
+import farmerPickImg from '../assets/why-farmer-pick.png';
+import robotImg from '../assets/why-robot.png';
+import womanHarvestImg from '../assets/why-woman-harvest.png';
 
-const TABS = ["Farmer Approach", "Smart Technology"];
-
-const TAB_IMAGES = {
-  "Farmer Approach": [
-    { img: farmerPickImg, label: null },
-    { img: robotImg, label: null },
-    { img: womanHarvestImg, label: "More Yield" },
-  ],
-  "Smart Technology": [
-    { img: robotImg, label: null },
-    { img: farmerPickImg, label: null },
-    { img: womanHarvestImg, label: "More Yield" },
-  ],
-};
+const tabs = ['Farmer Approach', 'Smart Technology'];
 
 export default function WhyChooseUs() {
-  const sectionRef = useRef(null);
-  const [visible, setVisible] = useState(false);
-  const [activeTab, setActiveTab] = useState("Farmer Approach");
+  const [activeTab, setActiveTab] = useState(tabs[0]);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.15 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const images = TAB_IMAGES[activeTab];
+  const images = {
+    'Farmer Approach': [farmerPickImg, robotImg, womanHarvestImg],
+    'Smart Technology': [robotImg, farmerPickImg, womanHarvestImg]
+  };
 
   return (
-    <section
-      id="sustainability"
-      ref={sectionRef}
-      className="px-5 md:px-[60px] py-[60px] md:py-[80px]"
-      style={{
-        background: "#fff",
-        fontFamily: "'DM Sans', sans-serif",
-        overflow: "hidden",
-      }}
-    >
-      <div
-        className="!grid-cols-1 md:!grid-cols-2 !gap-10 md:!gap-[60px]"
-        style={{
-          maxWidth: 1100,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 60,
-          alignItems: "center",
-        }}>
-
-        {/* ── LEFT: Aerial card ── */}
-        <div
-          style={{
-            borderRadius: 28,
-            overflow: "hidden",
-            position: "relative",
-            height: 540,
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateX(0)" : "translateX(-40px)",
-            transition: "opacity 0.7s ease, transform 0.7s ease",
-          }}
+    <section id="sustainability" className="px-5 md:px-16 py-16 md:py-24 bg-white">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+        {/* Left Column */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="relative h-[480px] md:h-[540px] rounded-[2rem] overflow-hidden group"
         >
-          {/* Aerial image */}
-          <img
-            src={aerialImg}
-            alt="Aerial farm"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              display: "block",
-            }}
+          <img 
+            src={aerialImg} 
+            alt="Aerial view of farm" 
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-
-          {/* Dark green overlay on bottom half */}
-          <div style={{
-            position: "absolute",
-            inset: 0,
-            background: "linear-gradient(to top, rgba(50,60,20,0.92) 40%, rgba(0,0,0,0.05) 70%)",
-          }} />
-
-          {/* Yellow arrow button top-right */}
-          <button
-            onClick={() => alert("Exploring Sustainable Practices...")}
-            style={{
-              position: "absolute",
-              top: 20,
-              right: 20,
-              width: 44,
-              height: 44,
-              borderRadius: "50%",
-              background: "#EAB308",
-              border: "none",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              transition: "background 0.2s",
-            }}
-            onMouseEnter={e => e.currentTarget.style.background = "#ca9e05"}
-            onMouseLeave={e => e.currentTarget.style.background = "#EAB308"}
-          >
-            <ArrowUpRight size={18} color="#fff" />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-700/90 via-forest-600/40 to-transparent" />
+          
+          <button className="absolute top-6 right-6 w-14 h-14 bg-brand-500 rounded-full flex items-center justify-center hover:bg-brand-400 transition-colors z-10">
+            <ArrowUpRight className="text-forest-700 w-6 h-6" />
           </button>
 
-          {/* Bottom text content */}
-          <div style={{
-            position: "absolute",
-            bottom: 32,
-            left: 32,
-            right: 32,
-          }}>
-            <h3 style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: 26,
-              fontWeight: 600,
-              color: "#fff",
-              marginBottom: 10,
-            }}>
-              Sustainable Practices
-            </h3>
-            <p style={{
-              fontSize: 13,
-              color: "rgba(255,255,255,0.7)",
-              marginBottom: 20,
-              lineHeight: 1.6,
-            }}>
-              Eco-friendly farming solutions that protect soil water and crops.
+          <div className="absolute bottom-0 left-0 right-0 p-8 z-10 text-white">
+            <h3 className="text-3xl font-serif mb-4">Sustainable Practices</h3>
+            <p className="text-white/80 mb-6 max-w-md">
+              We employ eco-friendly farming techniques that conserve resources while maximizing crop yield.
             </p>
-            {/* Tags */}
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {["Agri-Tech", "Smart Fields", "Eco-Farming"].map(tag => (
-                <span key={tag} style={{
-                  background: "rgba(255,255,255,0.15)",
-                  border: "1px solid rgba(255,255,255,0.25)",
-                  borderRadius: 100,
-                  padding: "5px 14px",
-                  fontSize: 12,
-                  color: "#fff",
-                  backdropFilter: "blur(4px)",
-                }}>
+            <div className="flex flex-wrap gap-3">
+              {['Agri-Tech', 'Smart Fields', 'Eco-Farming'].map((tag) => (
+                <span key={tag} className="px-4 py-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-sm text-sm">
                   {tag}
                 </span>
               ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* ── RIGHT: Content + tabs + images ── */}
-        <div style={{
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateX(0)" : "translateX(40px)",
-          transition: "opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s",
-        }}>
-          {/* Why Choose Us badge */}
-          <span style={{
-            display: "inline-block",
-            border: "1.5px solid #ddd",
-            borderRadius: 100,
-            padding: "6px 16px",
-            fontSize: 13,
-            color: "#555",
-            marginBottom: 20,
-          }}>
-            Why Choose Us
-          </span>
+        {/* Right Column */}
+        <div className="flex flex-col justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <span className="inline-block px-4 py-2 rounded-full bg-brand-500/10 text-brand-600 text-sm font-semibold mb-6">
+              Why Choose Us
+            </span>
+            <h2 className="text-4xl md:text-5xl font-serif text-forest-700 mb-6">
+              Farming Made Easy.
+            </h2>
+            <p className="text-gray-600 mb-8 max-w-lg">
+              We bring cutting-edge technology and time-tested farming methods together to provide the best solutions for modern agriculture.
+            </p>
 
-          {/* Main heading */}
-          <h2 style={{
-            fontFamily: "'DM Sans', sans-serif",
-            fontSize: "clamp(32px, 4.5vw, 42px)",
-            fontWeight: 700,
-            letterSpacing: "-1px",
-            color: "#111",
-            lineHeight: 1.1,
-            marginBottom: 18,
-          }}>
-            Farming Made Easy.
-          </h2>
-
-          <p style={{
-            fontSize: 14,
-            color: "#777",
-            lineHeight: 1.7,
-            maxWidth: 400,
-            marginBottom: 40,
-          }}>
-            We provide comprehensive innovative solutions tailored to address the unique challenges faced by modern farmers today.
-          </p>
-
-          {/* Nav arrows */}
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginBottom: 20 }}>
-            <button
-              onClick={() => setActiveTab(TABS[0])}
-              style={{
-                width: 44, height: 44, borderRadius: "50%",
-                border: "1.5px solid #ddd", background: "#fff",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                cursor: "pointer",
-              }}>
-              <ArrowLeft size={16} color="#111" />
-            </button>
-            <button
-              onClick={() => setActiveTab(TABS[1])}
-              style={{
-                width: 44, height: 44, borderRadius: "50%",
-                border: "none", background: "#EAB308",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                cursor: "pointer",
-              }}>
-              <ArrowRight size={16} color="#fff" />
-            </button>
-          </div>
-
-          {/* Tabs */}
-          <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
-            {TABS.map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                style={{
-                  padding: "9px 20px",
-                  borderRadius: 100,
-                  border: "1.5px solid #ddd",
-                  background: activeTab === tab ? "#111" : "#fff",
-                  color: activeTab === tab ? "#fff" : "#555",
-                  fontSize: 13,
-                  fontWeight: 500,
-                  cursor: "pointer",
-                  transition: "all 0.25s ease",
-                  fontFamily: "'DM Sans', sans-serif",
-                }}
-              >
-                {tab}
+            <div className="flex items-center gap-4 mb-8">
+              <button className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center hover:border-brand-500 hover:text-brand-500 transition-colors">
+                <ArrowLeft className="w-5 h-5" />
               </button>
-            ))}
-          </div>
+              <button className="w-12 h-12 rounded-full bg-brand-500 text-forest-700 flex items-center justify-center hover:bg-brand-400 transition-colors">
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
 
-          {/* 3 small images */}
-          <div className="!grid-cols-1 sm:!grid-cols-3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
-            {images.map((item, i) => (
-              <div
-                key={`${activeTab}-${i}`}
-                style={{
-                  borderRadius: 18,
-                  overflow: "hidden",
-                  position: "relative",
-                  height: i === 2 ? 220 : 200,
-                  opacity: 0,
-                  animation: `fadeUp 0.4s ease ${i * 0.08}s forwards`,
-                }}
-              >
-                <style>{`
-                  @keyframes fadeUp {
-                    from { opacity: 0; transform: translateY(16px); }
-                    to   { opacity: 1; transform: translateY(0); }
-                  }
-                `}</style>
+            <div className="flex gap-4 mb-8">
+              {tabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-6 py-3 rounded-full text-sm font-semibold transition-colors ${
+                    activeTab === tab
+                      ? 'bg-forest-700 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
 
-                <img
-                  src={item.img}
-                  alt=""
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                    transition: "transform 0.4s ease",
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.transform = "scale(1.06)"}
-                  onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}
-                />
-
-                {/* "More Yield" label on 3rd card */}
-                {item.label && (
-                  <div style={{
-                    position: "absolute",
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    background: "rgba(255,255,255,0.92)",
-                    backdropFilter: "blur(6px)",
-                    padding: "10px 14px",
-                    fontSize: 13,
-                    fontWeight: 600,
-                    color: "#111",
-                    textAlign: "center",
-                  }}>
-                    {item.label}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+            <div className="relative overflow-hidden h-48 md:h-56">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex gap-4 h-full"
+                >
+                  {images[activeTab].map((img, idx) => (
+                    <div key={idx} className="relative flex-1 rounded-2xl overflow-hidden h-full group">
+                      <img 
+                        src={img} 
+                        alt="" 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                      />
+                      {idx === 2 && (
+                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-forest-700 whitespace-nowrap">
+                          More Yield
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </motion.div>
         </div>
-
       </div>
     </section>
   );

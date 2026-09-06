@@ -1,124 +1,89 @@
-import { useEffect, useRef } from "react";
-import fieldRows from "../assets/field-rows.png";
-import soilSensor from "../assets/soil-sensor.png";
-import farmerTablet from "../assets/farmer-tablet.png";
-import { CornerDownLeft } from "lucide-react";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { CornerDownLeft } from 'lucide-react';
+import fieldRowsImg from '../assets/field-rows.png';
+import soilSensorImg from '../assets/soil-sensor.png';
+import farmerTabletImg from '../assets/farmer-tablet.png';
 
-const CARDS = [
+const steps = [
   {
-    title: "Analyze Your Farm",
-    desc: "We gather key soil, crop, and weather insights to understand your farm's unique needs.",
-    img: fieldRows,
+    step: 'STEP 01',
+    title: 'Analyze Your Farm',
+    description: 'We survey your land using advanced satellite imagery and soil data.',
+    img: fieldRowsImg
   },
   {
-    title: "Plan Smarter",
-    desc: "Get tailored insights and actionable plans for irrigation, fertilization, and crop care.",
-    img: soilSensor,
+    step: 'STEP 02',
+    title: 'Plan Smarter',
+    description: 'Get actionable insights and precise planting schedules tailored to your field.',
+    img: soilSensorImg
   },
   {
-    title: "Monitor & Optimize",
-    desc: "Monitor results in real time, adjust strategies, and continuously boost your yields.",
-    img: farmerTablet,
-  },
+    step: 'STEP 03',
+    title: 'Monitor & Optimize',
+    description: 'Track crop health in real-time and make data-driven decisions to boost yield.',
+    img: farmerTabletImg
+  }
 ];
 
 export default function HowItWorks() {
-  const cardRefs = useRef([]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0)";
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-    cardRefs.current.forEach((card) => { if (card) observer.observe(card); });
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section id="how-it-works" style={{ background: "#fff", padding: "100px 60px", fontFamily: "'DM Sans', sans-serif" }}>
-      {/* Header */}
-      <div style={{ textAlign: "center", marginBottom: 60 }}>
-        <span style={{
-          display: "inline-block", background: "#f5f5f5", borderRadius: 100,
-          padding: "6px 18px", fontSize: 13, fontWeight: 500, color: "#444",
-          marginBottom: 20, letterSpacing: 0.5,
-        }}>
+    <section id="how-it-works" className="px-5 md:px-16 py-16 md:py-24 bg-white">
+      <div className="text-center mb-16 max-w-3xl mx-auto">
+        <motion.span 
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="inline-block px-4 py-2 rounded-full bg-brand-500/10 text-brand-600 text-sm font-semibold mb-6"
+        >
           How It Works
-        </span>
-        <h2 style={{
-          fontFamily: "'DM Sans', sans-serif", fontSize: "clamp(28px, 4vw, 42px)",
-          fontWeight: 700, letterSpacing: "-1px", color: "#111", maxWidth: 600, margin: "0 auto", lineHeight: 1.2,
-        }}>
-          Simple steps. Smart technology. <em>Real results for farmers.</em>
-        </h2>
+        </motion.span>
+        <motion.h2 
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+          className="text-4xl md:text-5xl font-sans text-forest-700 leading-tight"
+        >
+          Simple steps. Smart technology. <br />
+          <span className="font-serif italic">Real results for farmers.</span>
+        </motion.h2>
       </div>
 
-      {/* Cards */}
-      <div style={{
-        display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-        gap: 24, maxWidth: 1100, margin: "0 auto",
-      }}>
-        {CARDS.map((card, i) => (
-          <div
-            key={i}
-            ref={(el) => (cardRefs.current[i] = el)}
-            style={{
-              background: "#F5F5F5", borderRadius: 24, padding: "32px 28px 0",
-              display: "flex", flexDirection: "column",
-              opacity: 0, transform: "translateY(40px)",
-              transition: `opacity 0.6s ease ${i * 0.15}s, transform 0.6s ease ${i * 0.15}s`,
-              overflow: "hidden", cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = "0 20px 60px rgba(0,0,0,0.1)";
-              e.currentTarget.style.transform = "translateY(-6px)";
-              e.currentTarget.querySelector("img").style.transform = "scale(1.05)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "none";
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.querySelector("img").style.transform = "scale(1)";
-            }}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {steps.map((item, index) => (
+          <motion.div
+            key={item.step}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: index * 0.15 }}
+            className="group flex flex-col bg-gray-50 rounded-3xl overflow-hidden hover:-translate-y-2 hover:shadow-xl transition-all duration-300"
           >
-            <span style={{ fontSize: 12, fontWeight: 600, color: "#999", letterSpacing: 1, marginBottom: 12 }}>
-              STEP {String(i + 1).padStart(2, "0")}
-            </span>
-            <h3 style={{
-              fontSize: 20, fontWeight: 700, letterSpacing: "-0.5px", color: "#111", marginBottom: 10,
-              fontFamily: "'DM Sans', sans-serif",
-            }}>
-              {card.title}
-            </h3>
-            <p style={{ fontSize: 14, color: "#666", lineHeight: 1.6, marginBottom: 20 }}>
-              {card.desc}
-            </p>
-            <div
-              onClick={(e) => { e.stopPropagation(); alert(`Redirecting to details about: ${card.title}`); }}
-              style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: "#111", marginBottom: 24, cursor: "pointer" }}
-            >
-              Learn More <CornerDownLeft size={14} strokeWidth={2.5} />
+            <div className="p-8 flex-grow">
+              <span className="text-brand-600 font-bold text-sm tracking-wider mb-4 block">
+                {item.step}
+              </span>
+              <h3 className="text-2xl font-serif text-forest-700 mb-4">
+                {item.title}
+              </h3>
+              <p className="text-gray-600 mb-8">
+                {item.description}
+              </p>
+              <button className="flex items-center gap-2 text-forest-700 font-semibold hover:text-brand-600 transition-colors group/btn">
+                Learn More
+                <CornerDownLeft className="w-4 h-4 transition-transform group-hover/btn:-translate-x-1" />
+              </button>
             </div>
-            <div style={{ borderRadius: "16px 16px 0 0", overflow: "hidden", height: 220 }}>
-              <img src={card.img} alt={card.title} style={{
-                width: "100%", height: "100%", objectFit: "cover",
-                transition: "transform 0.4s ease",
-              }} />
+            <div className="mt-auto px-6 overflow-hidden rounded-t-2xl mx-2 mb-0">
+              <img 
+                src={item.img} 
+                alt={item.title} 
+                className="w-full h-48 object-cover rounded-t-2xl transition-transform duration-500 group-hover:scale-105"
+              />
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
-
-      {/* Slider indicator */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 48 }}>
-        <div style={{ width: 60, height: 6, borderRadius: 10, background: "#111" }} />
-        <div style={{ width: 160, height: 6, borderRadius: 10, background: "#ddd" }} />
       </div>
     </section>
   );
